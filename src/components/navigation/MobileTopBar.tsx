@@ -5,17 +5,29 @@ import { usePathname } from "next/navigation";
 import { isAdminPath } from "./nav-items";
 import { LEAGUE_BRAND } from "@/lib/data/league-config";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { cn } from "@/lib/utils/cn";
 
 /**
- * Slim brand bar for inner pages on mobile. The Home page has the full hero, so
- * it is skipped there to avoid two wordmarks stacked on top of each other.
+ * Slim brand bar for inner pages on mobile. The Home page has the full hero and
+ * the admin area has no chrome, so the bar is hidden there.
+ *
+ * Important: this always renders a single root element and hides itself with a
+ * class, rather than returning `null`. A layout-level client component that
+ * switches between `null` and an element across a soft navigation leaves a
+ * duplicated "ghost" node in the App Router — which showed up as two stacked
+ * headers after navigating away from Home. Keeping one stable element avoids it.
  */
 export function MobileTopBar({ statusLabel }: { statusLabel?: string }) {
   const pathname = usePathname();
-  if (pathname === "/" || isAdminPath(pathname)) return null;
+  const suppressed = pathname === "/" || isAdminPath(pathname);
 
   return (
-    <div className="sticky top-0 z-40 border-b border-hairline bg-ink-950/85 backdrop-blur-xl md:hidden">
+    <div
+      className={cn(
+        "sticky top-0 z-40 border-b border-hairline bg-ink-950/85 backdrop-blur-xl md:hidden",
+        suppressed && "hidden",
+      )}
+    >
       <div className="flex h-12 items-center justify-between px-4">
         <Link
           href="/"

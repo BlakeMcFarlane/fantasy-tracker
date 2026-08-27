@@ -11,12 +11,16 @@ import { NAV_ITEMS, isActive, isAdminPath } from "./nav-items";
  */
 export function BottomNav() {
   const pathname = usePathname();
-  if (isAdminPath(pathname)) return null;
+  // Stable element + class hide instead of returning null (see MobileTopBar).
+  const hidden = isAdminPath(pathname);
 
   return (
     <nav
       aria-label="Main"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-hairline bg-ink-900/92 backdrop-blur-xl md:hidden"
+      className={cn(
+        "fixed inset-x-0 bottom-0 z-50 border-t border-hairline bg-ink-900/92 backdrop-blur-xl md:hidden",
+        hidden && "hidden",
+      )}
       style={{ paddingBottom: "var(--safe-bottom)" }}
     >
       <ul className="mx-auto flex max-w-lg items-stretch">

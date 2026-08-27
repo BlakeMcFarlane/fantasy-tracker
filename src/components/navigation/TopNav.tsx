@@ -13,10 +13,18 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
  */
 export function TopNav() {
   const pathname = usePathname();
-  if (isAdminPath(pathname)) return null;
+  // Always render a stable element and hide via class instead of returning
+  // null — a null<->element swap in a layout-level client component ghosts
+  // on soft navigation (see MobileTopBar).
+  const hidden = isAdminPath(pathname);
 
   return (
-    <header className="sticky top-0 z-50 hidden border-b border-hairline bg-ink-950/85 backdrop-blur-xl md:block">
+    <header
+      className={cn(
+        "sticky top-0 z-50 hidden border-b border-hairline bg-ink-950/85 backdrop-blur-xl",
+        !hidden && "md:block",
+      )}
+    >
       <div className="mx-auto flex h-16 max-w-3xl items-center justify-between gap-6 px-6">
         <Link
           href="/"
