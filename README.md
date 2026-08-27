@@ -1,5 +1,7 @@
 # Chase & Champions
 
+**Live:** https://chase-and-champions.vercel.app
+
 A custom app for a 14-person fantasy football league. Mobile-first, built with
 Next.js, and designed to be handed to friends as a link.
 
