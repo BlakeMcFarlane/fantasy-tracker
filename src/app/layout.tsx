@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Barlow_Condensed, Inter } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 
 import { BottomNav } from "@/components/navigation/BottomNav";
 import { TopNav } from "@/components/navigation/TopNav";
@@ -96,6 +97,7 @@ export default async function RootLayout({
         </main>
 
         <BottomNav />
+        <Analytics />
       </body>
     </html>
   );
