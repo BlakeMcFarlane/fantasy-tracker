@@ -100,7 +100,7 @@ export function SettingsGrid({ meta }: { meta: LeagueMeta | null }) {
 
   return (
     <Card>
-      <dl className="divide-y divide-white/6">
+      <dl className="divide-y divide-hairline">
         {rows.map((row) => (
           <div key={row.label} className="flex items-start gap-4 px-4 py-3.5 sm:px-5">
             <dt className="w-[8.5rem] shrink-0 text-sm font-medium text-mist-400">

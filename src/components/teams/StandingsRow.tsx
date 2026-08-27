@@ -41,7 +41,7 @@ export function StandingsRow({
       href={`/team/${team.id}`}
       className={cn(
         "group relative block overflow-hidden rounded-card px-3 py-3 ring-1 transition duration-200",
-        "bg-ink-850 ring-white/6 hover:ring-white/14 active:scale-[0.99] motion-reduce:active:scale-100",
+        "bg-ink-850 ring-hairline hover:ring-hairline-strong active:scale-[0.99] motion-reduce:active:scale-100",
         podium && "bg-gradient-to-r from-gold-500/[0.07] to-transparent",
       )}
     >
@@ -52,7 +52,7 @@ export function StandingsRow({
             "absolute inset-y-0 left-0 w-1",
             team.rank === 1 && "bg-gold-500",
             team.rank === 2 && "bg-mist-400",
-            team.rank === 3 && "bg-[#d08a52]",
+            team.rank === 3 && "bg-bronze",
           )}
           aria-hidden
         />
@@ -113,7 +113,7 @@ export function StandingsRow({
       </span>
 
       {detailed && hasPlayed && (
-        <span className="mt-2.5 flex items-stretch gap-2 border-t border-white/6 pt-2.5 pl-1">
+        <span className="mt-2.5 flex items-stretch gap-2 border-t border-hairline pt-2.5 pl-1">
           <DetailStat label="Pts for" value={formatPoints(team.pointsFor)} />
           <DetailStat
             label="Pts against"

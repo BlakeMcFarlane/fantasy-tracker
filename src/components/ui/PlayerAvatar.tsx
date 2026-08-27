@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils/cn";
 import { initialsFrom } from "@/lib/utils/format";
@@ -20,18 +20,23 @@ interface PlayerAvatarProps {
  */
 export function PlayerAvatar({ name, headshotUrl, className }: PlayerAvatarProps) {
   const [failed, setFailed] = useState(false);
+  // Headshots render server-side too, so a 404 can land before hydration.
+  const checkLoaded = useCallback((node: HTMLImageElement | null) => {
+    if (node?.complete && node.naturalWidth === 0) setFailed(true);
+  }, []);
   const canShow = Boolean(headshotUrl) && !failed;
 
   return (
     <span
       className={cn(
-        "relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-ink-700 ring-1 ring-white/8",
+        "relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-ink-700 ring-1 ring-hairline",
         className,
       )}
       aria-hidden
     >
       {canShow ? (
         <Image
+          ref={checkLoaded}
           src={headshotUrl!}
           alt=""
           width={44}

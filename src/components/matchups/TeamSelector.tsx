@@ -49,7 +49,7 @@ export function TeamSelector({
               "flex w-[4.75rem] shrink-0 snap-start flex-col items-center gap-1.5 rounded-2xl px-1 py-2 transition duration-200",
               selected
                 ? "bg-gold-500/12 ring-1 ring-gold-500/40"
-                : "hover:bg-white/5 active:scale-[0.97] motion-reduce:active:scale-100",
+                : "hover:bg-surface-hover active:scale-[0.97] motion-reduce:active:scale-100",
             )}
           >
             <TeamAvatar

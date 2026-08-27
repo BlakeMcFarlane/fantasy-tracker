@@ -4,10 +4,10 @@ import { cn } from "@/lib/utils/cn";
 type CardTone = "default" | "raised" | "gold" | "outline" | "ghost";
 
 const TONES: Record<CardTone, string> = {
-  default: "bg-ink-850 ring-1 ring-white/6 shadow-card",
-  raised: "bg-ink-800 ring-1 ring-white/8 shadow-lift",
+  default: "bg-ink-850 ring-1 ring-hairline shadow-card",
+  raised: "bg-ink-800 ring-1 ring-hairline shadow-lift",
   gold: "bg-gradient-to-br from-gold-500/16 via-ink-850 to-ink-900 ring-1 ring-gold-500/25 shadow-card",
-  outline: "bg-ink-900/60 ring-1 ring-white/8",
+  outline: "bg-ink-900/60 ring-1 ring-hairline",
   ghost: "bg-transparent",
 };
 
@@ -32,7 +32,7 @@ export function Card({
         "rounded-card",
         TONES[tone],
         interactive &&
-          "transition duration-200 ease-out hover:ring-white/15 hover:shadow-lift active:scale-[0.985] motion-reduce:active:scale-100",
+          "transition duration-200 ease-out hover:ring-hairline-strong hover:shadow-lift active:scale-[0.985] motion-reduce:active:scale-100",
         className,
       )}
       {...rest}

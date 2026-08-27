@@ -21,7 +21,7 @@ export function ImportantDates({
 
   return (
     <Card>
-      <ul className="divide-y divide-white/6">
+      <ul className="divide-y divide-hairline">
         {sorted.map((event) => {
           const remaining = timeRemaining(event.startsAt, serverNow);
           const style = EVENT_STYLES[event.kind];
@@ -33,7 +33,7 @@ export function ImportantDates({
                 className={cn(
                   "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1",
                   remaining.isPast
-                    ? "bg-ink-700 text-mist-500 ring-white/6"
+                    ? "bg-ink-700 text-mist-500 ring-hairline"
                     : cn("ring-1", style.chip),
                 )}
               >

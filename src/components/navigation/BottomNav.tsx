@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
-import { NAV_ITEMS, isActive } from "./nav-items";
+import { NAV_ITEMS, isActive, isAdminPath } from "./nav-items";
 
 /**
  * Persistent mobile navigation. Sits above the home indicator on iPhones via
@@ -11,11 +11,12 @@ import { NAV_ITEMS, isActive } from "./nav-items";
  */
 export function BottomNav() {
   const pathname = usePathname();
+  if (isAdminPath(pathname)) return null;
 
   return (
     <nav
       aria-label="Main"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-white/8 bg-ink-900/92 backdrop-blur-xl md:hidden"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-hairline bg-ink-900/92 backdrop-blur-xl md:hidden"
       style={{ paddingBottom: "var(--safe-bottom)" }}
     >
       <ul className="mx-auto flex max-w-lg items-stretch">

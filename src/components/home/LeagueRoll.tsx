@@ -39,7 +39,7 @@ export function LeagueRoll({ teams }: { teams: Team[] }) {
             <Link
               key={team.id}
               href={`/team/${team.id}`}
-              className="group flex w-[5.75rem] shrink-0 snap-start flex-col items-center gap-2 rounded-2xl p-2 transition hover:bg-white/5 active:scale-[0.97] motion-reduce:active:scale-100"
+              className="group flex w-[5.75rem] shrink-0 snap-start flex-col items-center gap-2 rounded-2xl p-2 transition hover:bg-surface-hover active:scale-[0.97] motion-reduce:active:scale-100"
             >
               <TeamAvatar
                 name={team.name}

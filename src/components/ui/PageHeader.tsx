@@ -19,7 +19,7 @@ export function PageHeader({
   return (
     <header className={cn("pt-2 pb-5", className)}>
       {eyebrow && (
-        <p className="mb-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-gold-500">
+        <p className="mb-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-gold-400">
           {eyebrow}
         </p>
       )}

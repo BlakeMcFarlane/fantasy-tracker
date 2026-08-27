@@ -28,7 +28,7 @@ export function StatTile({
   return (
     <div
       className={cn(
-        "rounded-tile bg-ink-800/80 p-3.5 ring-1 ring-white/6 sm:p-4",
+        "rounded-tile bg-ink-800/80 p-3.5 ring-1 ring-hairline sm:p-4",
         className,
       )}
     >

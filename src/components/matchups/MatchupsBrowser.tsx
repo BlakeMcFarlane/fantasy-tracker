@@ -7,7 +7,6 @@ import { TeamSelector } from "./TeamSelector";
 import { MatchupCard } from "./MatchupCard";
 import { ScrollRow } from "@/components/ui/ScrollRow";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { TeamAvatar } from "@/components/ui/TeamAvatar";
 import { cn } from "@/lib/utils/cn";
 import { formatRecord } from "@/lib/utils/format";
 import type { Matchup, Team } from "@/types/league";
@@ -84,23 +83,11 @@ export function MatchupsBrowser({
       </div>
 
       {selected && (
-        <div className="mt-3 flex items-center gap-3 rounded-card bg-ink-850 px-4 py-3 ring-1 ring-white/6">
-          <TeamAvatar
-            name={selected.name}
-            logoUrl={selected.logoUrl}
-            seed={selected.colorSeed}
-            size="md"
-          />
-          <div className="min-w-0 flex-1">
-            <p className="truncate font-display text-lg font-bold uppercase tracking-wide text-chalk">
-              {selected.name}
-            </p>
-            <p className="truncate text-xs text-mist-500">
-              {selected.owner ? `${selected.owner} · ` : ""}
-              {hasPlayed ? `${record} this season` : "Season hasn't started"}
-            </p>
-          </div>
-        </div>
+        <p className="mt-3 truncate px-1 text-sm text-mist-400">
+          <span className="font-semibold text-chalk">{selected.name}</span>
+          {selected.owner ? ` · ${selected.owner}` : ""}
+          {hasPlayed ? ` · ${record}` : ""}
+        </p>
       )}
 
       {weeks.length > 1 && (
@@ -115,7 +102,7 @@ export function MatchupsBrowser({
                   "min-h-9 shrink-0 snap-start rounded-full px-3.5 text-xs font-bold uppercase tracking-wide ring-1 transition",
                   week === currentWeek
                     ? "bg-gold-500/15 text-gold-400 ring-gold-500/30"
-                    : "bg-ink-800 text-mist-400 ring-white/8 hover:text-chalk",
+                    : "bg-ink-800 text-mist-400 ring-hairline hover:text-chalk",
                 )}
               >
                 Wk {week}

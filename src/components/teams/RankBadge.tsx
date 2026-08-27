@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils/cn";
 const MEDALS: Record<number, string> = {
   1: "text-gold-400",
   2: "text-mist-300",
-  3: "text-[#d08a52]",
+  3: "text-bronze",
 };
 
 /** Rank number, with a crown for first place. */

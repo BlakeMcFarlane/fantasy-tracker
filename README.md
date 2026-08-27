@@ -8,6 +8,8 @@ Next.js, and designed to be handed to friends as a link.
 - **Matchups** — pick any team, see their full week-by-week schedule
 - **Standings** — all 14 teams ranked, each one clicking through to a full profile
 
+Plus a dark/light switch, and an unlisted page showing who has been visiting.
+
 ## Stack
 
 | | |
@@ -96,6 +98,7 @@ src/
     standings/            All 14 teams, ranked
     matchups/             Team picker + week-by-week schedule
     team/[id]/            Team profile (prerendered for all 14)
+    backdoor/secret/      Unlisted visitor stats
     layout.tsx            Fonts, nav, metadata, safe areas
     loading/error/not-found
 
@@ -117,8 +120,10 @@ src/
       mock.ts               demo league
       ttl-cache.ts          in-process cache for non-fetch calls
     data/                 League facts that ESPN doesn't know (money, events)
+    analytics/            Visit recording, storage backends, roll-ups
     utils/                formatting, dates, position labels
 
+  middleware.ts           Records visits; gates the unlisted admin path
   types/                  Domain types
 ```
 
@@ -153,6 +158,85 @@ Nothing about the league is hardcoded into components:
 Adding an event is one object in the `LEAGUE_EVENTS` array; Home and League
 pick it up, sort it, and highlight whichever comes next.
 
+## Light and dark mode
+
+Dark is the default. The switch is an icon button that lives in existing chrome
+— the desktop header, the mobile title bar, and the top-right of the home hero
+— so it never takes a navigation slot.
+
+`<html data-theme>` is the single source of truth. An inline boot script applies
+the saved choice before first paint (no flash), every toggle subscribes to one
+shared store, and the choice persists in `localStorage`.
+
+Colours are defined once in [`globals.css`](src/app/globals.css) as two ramps:
+
+- `ink-*` is a **surface** ramp and `chalk` / `mist-*` is a **text** ramp —
+  lower numbers are always the more prominent end. Their literal values invert
+  between themes, so components never branch on the active theme.
+- Accent steps `500`/`600` are fixed in both themes (used as fills and tinted
+  backgrounds). Step `400` is the **text-safe** step and darkens in light mode
+  so it stays readable on a pale background.
+
+Adding a colour means adding it to both blocks in `globals.css` — nowhere else.
+
+## Visitor stats
+
+There is an unlisted page at **`/backdoor/secret`**. Nothing on the site links
+to it, it is marked `noindex, nofollow`, and it renders without the league
+navigation. Share the path with whoever should see it.
+
+It shows total visits, how many distinct people, who came back more than once,
+a 14-day chart, top pages, and recent activity.
+
+### How visitors are told apart
+
+[`middleware.ts`](src/middleware.ts) records one row per page view. Instead of
+storing an IP address, it stores a **salted SHA-256 hash of IP + browser
+string**, truncated to 12 characters:
+
+```
+visitorId = sha256(ANALYTICS_SALT + ip + userAgent).slice(0, 12)
+```
+
+That is enough to say "this is the same device as before" without keeping
+anything that identifies a person. The raw IP is never written down or shown.
+Link prefetches and known bots are excluded so one page load is one row.
+
+The honest limits, which the page states too: two people sharing a phone look
+like one visitor, and one person on both a phone and a laptop looks like two.
+
+### Setup
+
+```env
+# REQUIRED in production. Without it the hashes use a default salt and could,
+# in theory, be brute-forced back to IP addresses (the IPv4 space is small).
+ANALYTICS_SALT=          # openssl rand -hex 32
+
+# Optional but recommended: a second lock. When set, the page only opens with
+# ?key=<token> and anything else gets a plain 404 — identical to any other
+# nonexistent URL, so probing reveals nothing. A correct key sets a short-lived
+# cookie so the URL doesn't have to carry it around.
+ADMIN_TOKEN=
+
+# Durable storage. Add a Redis store from the Vercel marketplace (Upstash) and
+# these appear automatically.
+KV_REST_API_URL=
+KV_REST_API_TOKEN=
+```
+
+**Storage matters.** Middleware and page rendering are separate runtimes, and
+serverless instances recycle constantly, so without Redis the counts reset and
+undercount. Three backends are selected automatically:
+
+| Backend | When | Durable |
+|---|---|---|
+| `redis` | `KV_REST_API_*` or `UPSTASH_REDIS_REST_*` set | Yes |
+| `file` | local development, no Redis | Yes, in `.analytics/` |
+| `memory` | production with no Redis | **No** — resets constantly |
+
+The page shows which backend is live and warns when the numbers can't be
+trusted.
+
 ## Deploying to Vercel
 
 1. Push this repository to GitHub.
@@ -160,7 +244,10 @@ pick it up, sort it, and highlight whichever comes next.
    detected automatically, no `vercel.json` needed.
 3. Add `ESPN_LEAGUE_ID`, `ESPN_SEASON_ID`, and (for a private league) `ESPN_S2`
    and `SWID` under **Settings → Environment Variables**.
-4. Deploy, then share the URL.
+4. Add `ANALYTICS_SALT` (and ideally `ADMIN_TOKEN`) for the visitor stats page.
+5. Optionally add a Redis store from the marketplace so visit history survives
+   deploys.
+6. Deploy, then share the URL.
 
 Pages are statically rendered and revalidated every five minutes, so the app
 stays fast on mobile and stays polite to ESPN's servers.

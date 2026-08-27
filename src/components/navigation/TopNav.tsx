@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 import { LEAGUE_BRAND } from "@/lib/data/league-config";
-import { NAV_ITEMS, isActive } from "./nav-items";
+import { NAV_ITEMS, isActive, isAdminPath } from "./nav-items";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 /**
  * Desktop navigation. Same information architecture as the mobile bar, just
@@ -12,9 +13,10 @@ import { NAV_ITEMS, isActive } from "./nav-items";
  */
 export function TopNav() {
   const pathname = usePathname();
+  if (isAdminPath(pathname)) return null;
 
   return (
-    <header className="sticky top-0 z-50 hidden border-b border-white/8 bg-ink-950/85 backdrop-blur-xl md:block">
+    <header className="sticky top-0 z-50 hidden border-b border-hairline bg-ink-950/85 backdrop-blur-xl md:block">
       <div className="mx-auto flex h-16 max-w-3xl items-center justify-between gap-6 px-6">
         <Link
           href="/"
@@ -23,10 +25,11 @@ export function TopNav() {
           <span className="text-chalk transition-colors group-hover:text-gold-400">
             {LEAGUE_BRAND.wordmarkTop}
           </span>
-          <span className="text-gold-500">{LEAGUE_BRAND.wordmarkBottom}</span>
+          <span className="text-gold-400">{LEAGUE_BRAND.wordmarkBottom}</span>
         </Link>
 
-        <nav aria-label="Main">
+        <div className="flex items-center gap-1">
+          <nav aria-label="Main">
           <ul className="flex items-center gap-1">
             {NAV_ITEMS.map((item) => {
               const active = isActive(pathname, item);
@@ -40,7 +43,7 @@ export function TopNav() {
                       "flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold transition-colors duration-200",
                       active
                         ? "bg-gold-500/12 text-gold-400 ring-1 ring-gold-500/25"
-                        : "text-mist-400 hover:bg-white/5 hover:text-chalk",
+                        : "text-mist-400 hover:bg-surface-hover hover:text-chalk",
                     )}
                   >
                     <Icon className="h-4 w-4" aria-hidden />
@@ -49,8 +52,10 @@ export function TopNav() {
                 </li>
               );
             })}
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

@@ -6,7 +6,7 @@ import { LEAGUE_RULES } from "@/lib/data/league-config";
 export function RulesCard() {
   return (
     <Card>
-      <ul className="divide-y divide-white/6">
+      <ul className="divide-y divide-hairline">
         {LEAGUE_RULES.map((rule) => (
           <li key={rule.id} className="flex gap-4 p-4 sm:p-5">
             <div className="min-w-0 flex-1">

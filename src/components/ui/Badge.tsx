@@ -11,13 +11,13 @@ export type BadgeTone =
   | "muted";
 
 const TONES: Record<BadgeTone, string> = {
-  neutral: "bg-white/8 text-mist-300 ring-white/10",
+  neutral: "bg-surface-hover text-mist-300 ring-hairline-strong",
   gold: "bg-gold-500/15 text-gold-400 ring-gold-500/30",
   win: "bg-turf-500/15 text-turf-400 ring-turf-500/30",
   loss: "bg-flare-500/12 text-flare-400 ring-flare-500/25",
   info: "bg-frost-500/12 text-frost-400 ring-frost-500/25",
   live: "bg-flare-500/15 text-flare-400 ring-flare-500/35",
-  muted: "bg-ink-700 text-mist-400 ring-white/5",
+  muted: "bg-ink-700 text-mist-400 ring-hairline",
 };
 
 interface BadgeProps {

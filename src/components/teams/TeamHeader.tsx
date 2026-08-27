@@ -23,7 +23,7 @@ export function TeamHeader({
   const champion = isDefendingChampion(team.name, team.owner);
 
   return (
-    <header className="relative -mx-4 mb-6 overflow-hidden px-4 pb-6 pt-5 md:mx-0 md:rounded-card md:px-8 md:ring-1 md:ring-white/8">
+    <header className="relative -mx-4 mb-6 overflow-hidden px-4 pb-6 pt-5 md:mx-0 md:rounded-card md:px-8 md:ring-1 md:ring-hairline">
       <div
         className="absolute inset-0 bg-gradient-to-b from-ink-850 to-ink-950"
         aria-hidden

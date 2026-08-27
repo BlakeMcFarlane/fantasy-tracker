@@ -47,7 +47,7 @@ export function SeasonTimeline({
                     className={cn(
                       "w-full rounded-t-md transition-all duration-500 ease-out",
                       entry.won
-                        ? "bg-gradient-to-t from-turf-600 to-turf-400"
+                        ? "bg-gradient-to-t from-turf-600 to-turf-500"
                         : "bg-gradient-to-t from-ink-600 to-ink-500",
                     )}
                     style={{ height: `${height}%` }}
@@ -61,7 +61,7 @@ export function SeasonTimeline({
           })}
         </div>
 
-        <div className="mt-3 flex items-center justify-center gap-4 border-t border-white/6 pt-3 text-[0.6875rem] text-mist-500">
+        <div className="mt-3 flex items-center justify-center gap-4 border-t border-hairline pt-3 text-[0.6875rem] text-mist-500">
           <span className="flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-sm bg-turf-500" aria-hidden />
             Win

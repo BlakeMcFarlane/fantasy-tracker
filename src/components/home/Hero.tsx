@@ -1,27 +1,37 @@
 import { Badge } from "@/components/ui/Badge";
-import { LEAGUE_BRAND, LEAGUE_MONEY } from "@/lib/data/league-config";
+import { Countdown } from "@/components/ui/Countdown";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { LEAGUE_BRAND } from "@/lib/data/league-config";
+import { longDate } from "@/lib/utils/dates";
+import type { LeagueEvent } from "@/types/events";
 import { cn } from "@/lib/utils/cn";
 
 interface HeroProps {
   statusLabel: string;
   statusTone?: "gold" | "live" | "neutral";
   isLive?: boolean;
+  /** The draft, when it is still ahead of us — gets the countdown treatment. */
+  draft?: LeagueEvent | null;
+  serverNow: number;
 }
 
 /**
- * The first thing anyone sees. Full-bleed on phones, a rounded panel on
- * desktop, with a faint yard-line texture and a warm glow behind the wordmark.
+ * The first thing anyone sees: the wordmark, and the one date that matters.
+ * Deliberately holds only those two things — the money, the calendar and the
+ * standings each get their own card below.
  */
 export function Hero({
   statusLabel,
   statusTone = "gold",
   isLive = false,
+  draft,
+  serverNow,
 }: HeroProps) {
   return (
     <section
       className={cn(
-        "relative -mx-4 mb-5 overflow-hidden px-4 pb-8 pt-[calc(2rem+var(--safe-top))]",
-        "md:mx-0 md:mt-6 md:rounded-card md:px-10 md:pb-11 md:pt-12 md:ring-1 md:ring-white/8",
+        "relative -mx-4 mb-5 overflow-hidden px-4 pb-7 pt-[calc(1.5rem+var(--safe-top))]",
+        "md:mx-0 md:mt-6 md:rounded-card md:px-10 md:pb-9 md:pt-10 md:ring-1 md:ring-hairline",
       )}
     >
       {/* Layered background */}
@@ -38,67 +48,48 @@ export function Hero({
         aria-hidden
       />
       <div
-        className="absolute -left-20 top-24 h-56 w-56 rounded-full bg-frost-500/8 blur-[70px]"
-        aria-hidden
-      />
-      <div
         className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold-500/40 to-transparent"
         aria-hidden
       />
 
       <div className="relative">
-        <div className="mb-4 flex flex-wrap items-center gap-2">
+        <div className="mb-4 flex items-start justify-between gap-3">
           <Badge tone={statusTone} pulse={isLive}>
             {statusLabel}
           </Badge>
-          <Badge tone="muted">{LEAGUE_BRAND.season} Season</Badge>
+          {/* Home has no mobile title bar, so the theme switch lives here. */}
+          <ThemeToggle className="-mr-2 -mt-2 md:hidden" />
         </div>
 
         <h1 className="font-display font-extrabold uppercase leading-[0.84] tracking-[-0.01em]">
           <span className="block text-[clamp(3.25rem,16vw,5.5rem)] text-chalk">
             {LEAGUE_BRAND.wordmarkTop}
           </span>
-          <span className="block bg-gradient-to-r from-gold-300 via-gold-500 to-gold-600 bg-clip-text text-[clamp(3.25rem,16vw,5.5rem)] text-transparent">
+          <span className="text-brand-gradient block text-[clamp(3.25rem,16vw,5.5rem)]">
             {LEAGUE_BRAND.wordmarkBottom}
           </span>
         </h1>
 
-        <p className="mt-4 text-[0.8125rem] font-semibold uppercase tracking-[0.13em] text-mist-400 sm:text-sm sm:tracking-[0.2em]">
+        <p className="mt-3.5 text-[0.8125rem] font-semibold uppercase tracking-[0.13em] text-mist-400 sm:text-sm sm:tracking-[0.2em]">
           {LEAGUE_BRAND.tagline}
         </p>
 
-        <p className="mt-3 max-w-sm text-sm leading-relaxed text-mist-400 text-balance-pretty">
-          {LEAGUE_BRAND.blurb}
-        </p>
-
-        <dl className="mt-6 flex items-center gap-5 border-t border-white/8 pt-5 text-left">
-          <div>
-            <dt className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-mist-500">
-              Teams
-            </dt>
-            <dd className="font-display text-2xl font-bold tnum text-chalk">
-              {LEAGUE_MONEY.teamCount}
-            </dd>
+        {draft && (
+          <div className="mt-6 border-t border-hairline pt-5">
+            <p className="mb-3 text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-gold-400">
+              Draft day
+              <span className="ml-2 font-semibold text-mist-500">
+                {longDate(draft.startsAt)} · {draft.timeLabel}
+              </span>
+            </p>
+            <Countdown
+              target={draft.startsAt}
+              serverNow={serverNow}
+              size="lg"
+              onComplete="Draft is live"
+            />
           </div>
-          <div className="h-8 w-px bg-white/10" aria-hidden />
-          <div>
-            <dt className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-mist-500">
-              Buy-in
-            </dt>
-            <dd className="font-display text-2xl font-bold tnum text-chalk">
-              ${LEAGUE_MONEY.buyIn}
-            </dd>
-          </div>
-          <div className="h-8 w-px bg-white/10" aria-hidden />
-          <div>
-            <dt className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-mist-500">
-              Pot
-            </dt>
-            <dd className="font-display text-2xl font-bold tnum text-gold-400">
-              ${LEAGUE_MONEY.winnerPrize}
-            </dd>
-          </div>
-        </dl>
+        )}
       </div>
     </section>
   );

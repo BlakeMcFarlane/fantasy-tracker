@@ -1,24 +1,26 @@
 import type { Metadata, Viewport } from "next";
 import { Barlow_Condensed, Inter } from "next/font/google";
+import Script from "next/script";
 
 import { BottomNav } from "@/components/navigation/BottomNav";
 import { TopNav } from "@/components/navigation/TopNav";
 import { MobileTopBar } from "@/components/navigation/MobileTopBar";
 import { LEAGUE_BRAND } from "@/lib/data/league-config";
 import { getLeagueBundle } from "@/lib/espn/service";
+import { DEFAULT_THEME, THEME_INIT_SCRIPT } from "@/lib/theme";
 import { phaseHeadline } from "@/lib/espn/derive";
 import "./globals.css";
 
 const display = Barlow_Condensed({
   subsets: ["latin"],
   weight: ["600", "700", "800"],
-  variable: "--font-display",
+  variable: "--font-display-family",
   display: "swap",
 });
 
 const body = Inter({
   subsets: ["latin"],
-  variable: "--font-body",
+  variable: "--font-body-family",
   display: "swap",
 });
 
@@ -42,7 +44,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0b0d11",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#07080a" },
+    { media: "(prefers-color-scheme: light)", color: "#f6f5f2" },
+  ],
   width: "device-width",
   initialScale: 1,
   // Lets the app paint behind the notch and home indicator.
@@ -61,12 +66,21 @@ export default async function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
+      // Rendered with the default theme; the boot script below swaps it to the
+      // visitor's saved choice before paint, which React must not flag.
+      data-theme={DEFAULT_THEME}
+      suppressHydrationWarning
       className={`${display.variable} ${body.variable}`}
     >
       <body className="min-h-dvh antialiased">
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}
+        />
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-gold-500 focus:px-4 focus:py-2 focus:font-semibold focus:text-ink-950"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-gold-500 focus:px-4 focus:py-2 focus:font-semibold focus:text-on-accent"
         >
           Skip to content
         </a>

@@ -1,4 +1,5 @@
 import { Home, Shield, Swords, Trophy } from "lucide-react";
+import { ADMIN_PATH_PREFIX } from "@/lib/analytics/config";
 import type { LucideIcon } from "lucide-react";
 
 export interface NavItem {
@@ -15,6 +16,11 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/matchups", label: "Matchups", icon: Swords },
   { href: "/standings", label: "Standings", icon: Trophy, matches: ["/team"] },
 ];
+
+/** The unlisted admin area renders without the league chrome. */
+export function isAdminPath(pathname: string): boolean {
+  return pathname.startsWith(ADMIN_PATH_PREFIX);
+}
 
 export function isActive(pathname: string, item: NavItem): boolean {
   if (item.href === "/") return pathname === "/";

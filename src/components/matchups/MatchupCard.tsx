@@ -66,7 +66,7 @@ export function MatchupCard({
         outcome?.tone === "win" && "ring-turf-500/20",
       )}
     >
-      <div className="flex items-center justify-between border-b border-white/6 px-4 py-2.5">
+      <div className="flex items-center justify-between border-b border-hairline px-4 py-2.5">
         <span className="font-display text-sm font-bold uppercase tracking-[0.12em] text-mist-400">
           {matchup.isPlayoff ? "Playoffs · " : ""}Week {matchup.week}
         </span>
@@ -94,7 +94,7 @@ export function MatchupCard({
           <p className="mt-1 text-xs text-mist-500">No game this week.</p>
         </div>
       ) : (
-        <ul className="divide-y divide-white/5">
+        <ul className="divide-y divide-hairline">
           {lines.map((line, index) => {
             const won = index === 0 ? firstWon : secondWon;
             const lost = isFinal && !won && !tied;
@@ -127,11 +127,6 @@ export function MatchupCard({
                   >
                     {line.team?.name ?? "To be decided"}
                   </p>
-                  {line.team?.owner && (
-                    <p className="truncate text-xs text-mist-500">
-                      {line.team.owner}
-                    </p>
-                  )}
                 </div>
 
                 <div className="shrink-0 text-right">

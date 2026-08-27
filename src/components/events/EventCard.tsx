@@ -1,6 +1,5 @@
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { Countdown } from "@/components/ui/Countdown";
 import { EVENT_STYLES } from "./event-styles";
 import type { LeagueEvent } from "@/types/events";
 import { cn } from "@/lib/utils/cn";
@@ -47,14 +46,14 @@ export function EventCard({ event, serverNow, featured = false }: EventCardProps
           className={cn(
             "flex h-16 w-14 shrink-0 flex-col items-center justify-center rounded-2xl ring-1",
             featured
-              ? "bg-gold-500 text-ink-950 ring-gold-400/50"
-              : "bg-ink-800 text-chalk ring-white/8",
+              ? "bg-gold-500 text-on-accent ring-gold-400/50"
+              : "bg-ink-800 text-chalk ring-hairline",
           )}
         >
           <span
             className={cn(
               "font-display text-[0.625rem] font-bold uppercase tracking-[0.14em]",
-              featured ? "text-ink-950/70" : "text-mist-500",
+              featured ? "text-on-accent/70" : "text-mist-500",
             )}
           >
             {monthShort(event.startsAt)}
@@ -65,15 +64,10 @@ export function EventCard({ event, serverNow, featured = false }: EventCardProps
         </div>
 
         <div className="min-w-0 flex-1">
-          <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
-            <Badge tone="neutral" className={cn("ring-1", style.chip)}>
-              <Icon className="h-3 w-3" aria-hidden />
-              {style.label}
-            </Badge>
-            {featured && !remaining.isPast && (
-              <Badge tone="gold">Up next</Badge>
-            )}
-          </div>
+          <Badge tone="neutral" className={cn("mb-1.5 ring-1", style.chip)}>
+            <Icon className="h-3 w-3" aria-hidden />
+            {style.label}
+          </Badge>
 
           <h3 className="font-display text-lg font-bold uppercase leading-tight tracking-wide text-chalk sm:text-xl">
             {event.title}
@@ -90,17 +84,6 @@ export function EventCard({ event, serverNow, featured = false }: EventCardProps
           <p className="mt-2 text-sm leading-relaxed text-mist-400 text-balance-pretty">
             {event.description}
           </p>
-
-          {featured && (
-            <div className="mt-4 border-t border-white/8 pt-3.5">
-              <Countdown
-                target={event.startsAt}
-                serverNow={serverNow}
-                size="lg"
-                onComplete="Happening now"
-              />
-            </div>
-          )}
         </div>
       </div>
     </Card>

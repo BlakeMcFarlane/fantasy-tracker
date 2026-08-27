@@ -27,7 +27,7 @@ export function SegmentedControl<T extends string>({
       role="radiogroup"
       aria-label={label}
       className={cn(
-        "inline-flex rounded-full bg-ink-800 p-1 ring-1 ring-white/8",
+        "inline-flex rounded-full bg-ink-800 p-1 ring-1 ring-hairline",
         className,
       )}
     >
@@ -43,7 +43,7 @@ export function SegmentedControl<T extends string>({
             className={cn(
               "min-h-9 rounded-full px-3.5 text-xs font-bold uppercase tracking-wide transition duration-200",
               selected
-                ? "bg-gold-500 text-ink-950 shadow-sm"
+                ? "bg-gold-500 text-on-accent shadow-sm"
                 : "text-mist-400 hover:text-chalk",
             )}
           >

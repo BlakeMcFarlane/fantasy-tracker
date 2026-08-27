@@ -24,7 +24,7 @@ export function PrizeCard() {
           </span>
         </div>
 
-        <p className="font-display text-[clamp(4rem,22vw,6rem)] font-extrabold leading-[0.85] tnum text-transparent bg-gradient-to-b from-gold-300 to-gold-600 bg-clip-text">
+        <p className="text-brand-gradient font-display text-[clamp(4rem,22vw,6rem)] font-extrabold leading-[0.85] tnum">
           <CountUp value={winnerPrize} prefix="$" />
         </p>
 
@@ -40,7 +40,7 @@ export function PrizeCard() {
           <span className="font-semibold uppercase tracking-[0.12em] text-mist-500">
             Forfeit
           </span>
-          <span className="rounded-full bg-ink-800 px-2.5 py-1 font-bold uppercase tracking-wide text-mist-300 ring-1 ring-white/8">
+          <span className="rounded-full bg-ink-800 px-2.5 py-1 font-bold uppercase tracking-wide text-mist-300 ring-1 ring-hairline">
             {forfeit ?? "TBD"}
           </span>
         </div>

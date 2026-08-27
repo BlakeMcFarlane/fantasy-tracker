@@ -71,7 +71,7 @@ function RosterGroup({
       </div>
 
       <Card>
-        <ul className="divide-y divide-white/5 py-1">
+        <ul className="divide-y divide-hairline py-1">
           {players.map((player) => (
             <PlayerRow key={`${player.id}-${player.lineupSlot}`} player={player} />
           ))}
@@ -79,7 +79,7 @@ function RosterGroup({
       </Card>
 
       {showLegend && (
-        <details className="group mt-2 rounded-2xl bg-ink-850/60 px-4 py-3 ring-1 ring-white/6">
+        <details className="group mt-2 rounded-2xl bg-ink-850/60 px-4 py-3 ring-1 ring-hairline">
           <summary className="cursor-pointer list-none text-xs font-semibold text-mist-400 transition hover:text-chalk">
             New to fantasy? What the position labels mean
             <span className="ml-1 text-mist-600 group-open:hidden" aria-hidden>

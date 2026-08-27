@@ -141,7 +141,7 @@ export default async function TeamPage({ params }: PageProps) {
 
         <Link
           href={`/matchups?team=${team.id}`}
-          className="flex min-h-12 items-center justify-center gap-2 rounded-full bg-ink-800 px-5 text-sm font-semibold text-mist-300 ring-1 ring-white/8 transition hover:bg-ink-700 hover:text-chalk"
+          className="flex min-h-12 items-center justify-center gap-2 rounded-full bg-ink-800 px-5 text-sm font-semibold text-mist-300 ring-1 ring-hairline transition hover:bg-ink-700 hover:text-chalk"
         >
           See {team.name}&apos;s full schedule
           <ArrowRight className="h-4 w-4" aria-hidden />

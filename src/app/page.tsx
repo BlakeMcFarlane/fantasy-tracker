@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { ArrowRight, ScrollText, Swords } from "lucide-react";
 
 import { Hero } from "@/components/home/Hero";
 import { PrizeCard } from "@/components/home/PrizeCard";
@@ -9,7 +7,6 @@ import { EventsSection } from "@/components/events/EventsSection";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { StandingsList } from "@/components/teams/StandingsList";
 import { DataNotice } from "@/components/ui/DataNotice";
-import { Card } from "@/components/ui/Card";
 
 import { getLeagueBundle } from "@/lib/espn/service";
 import { getServerNow } from "@/lib/utils/server-time";
@@ -53,6 +50,8 @@ export default async function HomePage() {
   const serverNow = getServerNow();
   const played = hasPlayedGames(bundle);
   const events = resolveEvents(bundle.meta?.settings.draftDate);
+  const upcoming = upcomingEvents(serverNow, events);
+  const draft = upcoming.find((event) => event.kind === "draft") ?? null;
   const status = heroStatus(
     bundle.meta?.phase,
     bundle.meta?.currentWeek,
@@ -66,6 +65,8 @@ export default async function HomePage() {
         statusLabel={status.label}
         statusTone={status.tone === "live" ? "live" : "gold"}
         isLive={status.isLive}
+        draft={draft}
+        serverNow={serverNow}
       />
 
       <div className="space-y-8 pt-1">
@@ -91,64 +92,7 @@ export default async function HomePage() {
 
         <LeagueRoll teams={bundle.teams} />
 
-        <section aria-label="Explore the league">
-          <div className="grid gap-2.5 sm:grid-cols-2">
-            <QuickLink
-              href="/matchups"
-              title="Matchups"
-              description="Every team's week-by-week schedule"
-              icon={<Swords className="h-5 w-5" aria-hidden />}
-              tone="frost"
-            />
-            <QuickLink
-              href="/league"
-              title="League Info"
-              description="Rules, money, dates, and settings"
-              icon={<ScrollText className="h-5 w-5" aria-hidden />}
-              tone="gold"
-            />
-          </div>
-        </section>
       </div>
     </>
-  );
-}
-
-function QuickLink({
-  href,
-  title,
-  description,
-  icon,
-  tone,
-}: {
-  href: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  tone: "frost" | "gold";
-}) {
-  return (
-    <Link href={href} className="block">
-      <Card interactive>
-        <div className="flex items-center gap-3.5 p-4">
-          <div
-            className={
-              tone === "frost"
-                ? "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-frost-500/12 text-frost-400 ring-1 ring-frost-500/20"
-                : "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gold-500/12 text-gold-400 ring-1 ring-gold-500/20"
-            }
-          >
-            {icon}
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="font-display text-base font-bold uppercase tracking-wide text-chalk">
-              {title}
-            </p>
-            <p className="text-xs text-mist-400">{description}</p>
-          </div>
-          <ArrowRight className="h-4 w-4 shrink-0 text-ink-500" aria-hidden />
-        </div>
-      </Card>
-    </Link>
   );
 }

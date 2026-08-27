@@ -80,7 +80,7 @@ export default async function LeaguePage() {
             href={LEAGUE_LINKS.espnLeagueUrl}
             target="_blank"
             rel="noreferrer noopener"
-            className="flex min-h-12 items-center justify-center gap-2 rounded-full bg-ink-800 px-5 text-sm font-semibold text-mist-300 ring-1 ring-white/8 transition hover:bg-ink-700 hover:text-chalk"
+            className="flex min-h-12 items-center justify-center gap-2 rounded-full bg-ink-800 px-5 text-sm font-semibold text-mist-300 ring-1 ring-hairline transition hover:bg-ink-700 hover:text-chalk"
           >
             Open the league on ESPN
             <ExternalLink className="h-4 w-4" aria-hidden />
