@@ -83,15 +83,39 @@ interface RedisConfig {
   token: string;
 }
 
+/**
+ * Finds the Redis REST credentials no matter how the integration named them.
+ *
+ * Vercel's Upstash marketplace integration lets you set an env-var prefix when
+ * you attach the store, so the vars can arrive as `KV_REST_API_URL`,
+ * `UPSTASH_REDIS_REST_URL`, or something prefixed like
+ * `BACKDOOR_STORAGE_KV_REST_API_URL`. Rather than hardcode one, this looks for
+ * any `*KV_REST_API_URL` and pairs it with the write token that shares its
+ * prefix (never the read-only token — this store writes).
+ */
 function redisConfig(): RedisConfig | null {
-  const url =
+  // Preferred exact names first, for a clean local .env.
+  const directUrl =
     process.env.KV_REST_API_URL?.trim() ||
     process.env.UPSTASH_REDIS_REST_URL?.trim();
-  const token =
+  const directToken =
     process.env.KV_REST_API_TOKEN?.trim() ||
     process.env.UPSTASH_REDIS_REST_TOKEN?.trim();
-  if (!url || !token) return null;
-  return { url: url.replace(/\/$/, ""), token };
+  if (directUrl && directToken) {
+    return { url: directUrl.replace(/\/$/, ""), token: directToken };
+  }
+
+  // Otherwise discover a prefixed pair (e.g. BACKDOOR_STORAGE_KV_REST_API_URL).
+  for (const [key, value] of Object.entries(process.env)) {
+    if (!key.endsWith("KV_REST_API_URL") || !value?.trim()) continue;
+    const prefix = key.slice(0, -"KV_REST_API_URL".length);
+    const token = process.env[`${prefix}KV_REST_API_TOKEN`]?.trim();
+    if (token) {
+      return { url: value.trim().replace(/\/$/, ""), token };
+    }
+  }
+
+  return null;
 }
 
 async function redisPipeline(
