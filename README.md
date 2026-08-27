@@ -224,15 +224,16 @@ KV_REST_API_URL=
 KV_REST_API_TOKEN=
 ```
 
-**Storage matters.** Middleware and page rendering are separate runtimes, and
-serverless instances recycle constantly, so without Redis the counts reset and
-undercount. Three backends are selected automatically:
+**Storage is not optional in production.** Visits are written by middleware and
+read by the page, and on Vercel those run as separate instances with no shared
+memory — so without Redis the page shows zero, not an undercount. Three backends
+are selected automatically:
 
 | Backend | When | Durable |
 |---|---|---|
 | `redis` | `KV_REST_API_*` or `UPSTASH_REDIS_REST_*` set | Yes |
 | `file` | local development, no Redis | Yes, in `.analytics/` |
-| `memory` | production with no Redis | **No** — resets constantly |
+| `memory` | production with no Redis | **No** — records nothing usable |
 
 The page shows which backend is live and warns when the numbers can't be
 trusted.

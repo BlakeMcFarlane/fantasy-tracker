@@ -248,7 +248,7 @@ function Warnings({
     notes.push({
       tone: "warn",
       text:
-        "Storing visits in memory. Numbers reset on every deploy and each serverless instance counts separately, so this undercounts badly. Connect Vercel KV or Upstash Redis (KV_REST_API_URL + KV_REST_API_TOKEN) to make it durable.",
+        "No storage connected, so nothing is being recorded and these numbers will stay at zero. Visits are written by middleware and read by this page, and on Vercel those run as separate instances that cannot share memory. Add a Redis store (Vercel dashboard → Storage → Upstash, free tier) — it sets KV_REST_API_URL and KV_REST_API_TOKEN for you, and this page starts working on the next deploy.",
     });
   }
   if (data.storeKind === "file") {
